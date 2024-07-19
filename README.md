@@ -1,7 +1,9 @@
 # crowdstrike-fixer
-An autorun script for systemrescuecd to fix a pooched crowdstrike
+An autorun script that fixes the C-00000291*.sys Friday June 19th Crowdstrike crash for systemrescuecd, includes BitLocker mounting support. 
 
-## Instructions
+https://www.crowdstrike.com/blog/statement-on-falcon-content-update-for-windows-hosts/
+
+## Instructions: Autorun
 
 Make a "writable filesystem" systemrescuecd usb according to this doc:
 
@@ -18,3 +20,11 @@ Note: you can set `AHCI` back to `RAID On` after running the script to boot Wind
 Make sure only 1 Windows HDD or SSD is installed on the machine.
 
 If BitLocker is enabled, dislocker will be run to mount it, have your recovery key handy for this step.
+
+## Instructions: Manually
+
+Just boot a plain old systemrescuecd iso and run the autorun as a shell script
+
+`bash ./autorun`
+
+Same bios settings as above apply.
