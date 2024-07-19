@@ -1,0 +1,49 @@
+#!/bin/bash
+set -e 
+
+export BITLOCKER=$(lsblk -f -o name,fstype -r | grep BitLocker | cut -d ' ' -f 1 )
+
+if [ ! -z $BITLOCKER ]; then
+	echo "BITLOCKER"
+	# encrypted case
+	echo "$BITLOCKER"
+	mkdir /bitlocker
+	dislocker -V /dev/$BITLOCKER -p -- /bitlocker
+	mount -o loop /bitlocker/dislocker-file /mnt
+
+else
+	echo "NO BITLOCKER"
+	# unencrypted case
+	export WINDOWS="/dev/disk/by-label/Windows"
+	# make sure Windows LABEL exists
+	if [ ! -L "$WINDOWS" ]; then
+		echo "$WINDOWS doesn't exist"
+		exit 1
+	else
+		echo "Found $WINDOWS"
+		ls -l $WINDOWS
+	fi
+
+	echo "Mounting $WINDOWS"
+	mount "$WINDOWS" /mnt
+
+fi	
+sleep 1
+
+
+# do the thing
+export FILE="/mnt/Windows/System32/drivers/CrowdStrike/C-00000291*.sys"
+ls $FILE
+echo $FILE
+
+if [ -f $FILE ]; then
+	ls -lah $FILE
+	rm -f $FILE
+	echo "$FILE deleted, press enter to reboot"
+	read -p "Press enter> "
+	reboot
+fi
+
+
+
+
