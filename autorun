@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e 
 
+echo -e "\e[34mCrowdStrike C-00000291*.sys fixer\e[0m"
+
 export BITLOCKER=$(lsblk -f -o name,fstype -r | grep BitLocker | cut -d ' ' -f 1 )
 
 if [ ! -z $BITLOCKER ]; then
@@ -39,10 +41,13 @@ echo $FILE
 if [ -f $FILE ]; then
 	ls -lah $FILE
 	rm -f $FILE
-	echo "$FILE deleted, press enter to reboot"
-	read -p "Press enter> "
-	reboot
+	echo -e "\e[32mSuccess: $FILE deleted, reboot now!\e[0m"
+	sleep 1200
+	shutdown now
 fi
+
+echo -e "\e[31mERROR: Automatic Fix Failed\e[0m"
+
 
 
 
